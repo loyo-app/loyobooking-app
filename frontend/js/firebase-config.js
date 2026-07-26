@@ -1,0 +1,11 @@
+// From Firebase console → Project settings → Your apps.
+// This key is safe to be public; Firestore Security Rules (not this file)
+// are what actually protect your data.
+export const firebaseConfig = {
+  apiKey: "AIzaSyA4L4FZATU5LO0M2HVK8IrtR5g5JS1n5CM",
+  authDomain: "loyobooking-app.firebaseapp.com",
+  projectId: "loyobooking-app",
+  storageBucket: "loyobooking-app.firebasestorage.app",
+  messagingSenderId: "438653687937",
+  appId: "1:438653687937:web:adccb860e60f03b3021580"
+};
