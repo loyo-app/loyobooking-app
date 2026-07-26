@@ -1,0 +1,62 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+  match /{document=**} {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    function myRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+    function isOwner() {
+      return isSignedIn() && myRole() == 'owner';
+    }
+
+    match /users/{userId} {
+      // Any signed-in person can read profiles (needed to show barber names, etc).
+      allow read: if isSignedIn();
+
+      // A person can create their own "customer" profile (self sign-up),
+      // or the owner can create any profile (used for barber accounts).
+      allow create: if isSignedIn() && (
+        (userId == request.auth.uid && request.resource.data.role == 'customer') ||
+        isOwner()
+      );
+
+      // People can update their own profile as long as they don't change
+      // their own role; the owner can update anyone.
+      allow update: if isSignedIn() && (
+        (userId == request.auth.uid && request.resource.data.role == resource.data.role) ||
+        isOwner()
+      );
+
+      // Only the owner can delete profiles (used to remove barber access).
+      allow delete: if isOwner();
+    }
+
+    match /bookings/{bookingId} {
+      // Only the customer who made it, the assigned barber, or the owner
+      // can see a booking.
+      allow read: if isSignedIn() && (
+        resource.data.customerId == request.auth.uid ||
+        resource.data.barberId == request.auth.uid ||
+        isOwner()
+      );
+
+      // Only customers can create bookings, and only under their own ID.
+      allow create: if isSignedIn() &&
+        request.resource.data.customerId == request.auth.uid &&
+        myRole() == 'customer';
+
+      // The customer, the assigned barber, or the owner can update
+      // (used for cancelling).
+      allow update: if isSignedIn() && (
+        resource.data.customerId == request.auth.uid ||
+        resource.data.barberId == request.auth.uid ||
+        isOwner()
+      );
+
+      allow delete: if false;
+    }
+  }
+}
