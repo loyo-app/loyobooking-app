@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loyobooking — Owner Dashboard</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="pole-stripe"></div>
+  <div class="topbar">
+    <h2 class="brand">Loyo<span>booking</span></h2>
+    <button class="logout-btn" onclick="logout()">Log Out</button>
+  </div>
+
+  <div class="wrap">
+    <h3 class="section-title">Add Staff Member</h3>
+    <div class="card">
+      <form id="staff-form">
+        <div class="grid-2">
+          <div>
+            <label for="staff-name">Full name</label>
+            <input id="staff-name" type="text" required>
+          </div>
+          <div>
+            <label for="staff-phone">Phone</label>
+            <input id="staff-phone" type="tel">
+          </div>
+        </div>
+        <div class="grid-2">
+          <div>
+            <label for="staff-username">Username</label>
+            <input id="staff-username" type="text" required>
+          </div>
+          <div>
+            <label for="staff-password">Password</label>
+            <input id="staff-password" type="password" required minlength="6">
+          </div>
+        </div>
+        <button class="btn-primary" type="submit">Create Barber Account</button>
+      </form>
+      <div class="msg" id="staff-msg"></div>
+    </div>
+
+    <h3 class="section-title">Staff</h3>
+    <div class="card">
+      <div id="staff-container"><p class="empty-state">Loading…</p></div>
+    </div>
+
+    <h3 class="section-title">All Bookings</h3>
+    <div class="card">
+      <div id="bookings-container"><p class="empty-state">Loading…</p></div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/owner.js"></script>
+</body>
+</html>
